@@ -23,7 +23,12 @@
     const captureButton = document.getElementById('capture');
 
     const constraints = {
-        video: true,
+        video: {
+            facingMode: {
+                //Use the back camera
+                exact: 'environment'
+            }
+        },
     };
     captureButton.addEventListener('click', () => {
         // Draw the video frame to the canvas.
