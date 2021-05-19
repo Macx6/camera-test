@@ -22,11 +22,8 @@
 
     const constraints = {
         video: {
-            facingMode: {
-                //Use the back camera
-                exact: 'environment'
-            },
             optional: [
+                { facingMode: { exact: 'environment' },},
                 { minFrameRate: 60 },
                 { maxWidth: 640 },
                 { maxHeight: 480 }
