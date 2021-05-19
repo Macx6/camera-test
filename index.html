@@ -22,11 +22,12 @@
 
     const constraints = {
         video: {
-            optional: [
+            mandatory: [
                 { facingMode: { exact: 'environment' },},
-                { minFrameRate: 60 },
-                { maxWidth: 640 },
-                { maxHeight: 480 }
+            ],
+            optional: [
+                { width: { min: 1280 } },
+                { height: { min: 720 } },
             ]
 
         },
