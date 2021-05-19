@@ -22,12 +22,9 @@
 
     const constraints = {
         video: {
-            mandatory: {facingMode: 'environment'},
-            optional: [
-                { width: { min: 1280 } },
-                { height: { min: 720 } },
-            ]
-
+            facingMode: 'environment',
+            width: {min: 1280},
+            height: {min: 720},
         },
     };
     let imageCapture = null
@@ -37,12 +34,14 @@
         imageCapture.takePhoto()
             .then(blob => {
                 img.src = URL.createObjectURL(blob);
-                img.onload = () => { URL.revokeObjectURL(this.src); }
+                img.onload = () => {
+                    URL.revokeObjectURL(this.src);
+                }
             })
             .catch(error => console.error('takePhoto() error:', error));
     });
     try {
-        navigator.mediaDevices.getUserMedia(constraints).then((stream)=> {
+        navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
             video = stream.getVideoTracks()[0]
             player.srcObject = stream
         })
