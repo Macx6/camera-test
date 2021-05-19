@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>camera test</title>
+    <style>
+        #player {
+            min-height: 90vh;
+            min-width: 100vw;
+        }
+    </style>
+</head>
+<body>
+<video id="player" controls autoplay></video>
+<button id="capture">Capture</button>
+<canvas id="canvas" width=320 height=240></canvas>
+<script>
+    const supported = 'mediaDevices' in navigator;
+
+    const player = document.getElementById('player');
+    const canvas = document.getElementById('canvas');
+    const context = canvas.getContext('2d');
+    const captureButton = document.getElementById('capture');
+
+    const constraints = {
+        video: true,
+    };
+    captureButton.addEventListener('click', () => {
+        // Draw the video frame to the canvas.
+        context.drawImage(player, 0, 0, canvas.width, canvas.height);
+        player.srcObject.getVideoTracks().forEach(track => track.stop());
+    });
+    if (supported) {
+        navigator.mediaDevices.getUserMedia(constraints)
+            .then((stream) => {
+                player.srcObject = stream;
+            });
+    }
+
+</script>
+</body>
+</html>
