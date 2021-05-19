@@ -46,10 +46,11 @@
             })
             .catch(error => console.error('takePhoto() error:', error));
     });
-    try{
-        const stream = await navigator.mediaDevices.getUserMedia(constraints)
-        video = stream.getVideoTracks()[0]
-        player.srcObject = stream
+    try {
+        navigator.mediaDevices.getUserMedia(constraints).then((stream)=> {
+            video = stream.getVideoTracks()[0]
+            player.srcObject = stream
+        })
     } catch (error) {
         alert(`${error.name}`)
         console.error(error)
