@@ -11,12 +11,11 @@
     </style>
 </head>
 <body>
-<video id="player" controls autoplay></video>
+<video id="player" autoplay></video>
 <button id="capture">Capture</button>
-<canvas id="canvas" width=320 height=240></canvas>
+<img id="canvas" width=320 height=240/>
+<script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
 <script>
-    const supported = 'mediaDevices' in navigator;
-
     const player = document.getElementById('player');
     const canvas = document.getElementById('canvas');
     const context = canvas.getContext('2d');
@@ -27,19 +26,33 @@
             facingMode: {
                 //Use the back camera
                 exact: 'environment'
-            }
+            },
+            optional: [
+                { minFrameRate: 60 },
+                { maxWidth: 640 },
+                { maxHeight: 480 }
+            ]
+
         },
     };
+    let imageCapture = null
+    let video = null
     captureButton.addEventListener('click', () => {
-        // Draw the video frame to the canvas.
-        context.drawImage(player, 0, 0, canvas.width, canvas.height);
-        player.srcObject.getVideoTracks().forEach(track => track.stop());
+        imageCapture = new ImageCapture(video)
+        imageCapture.takePhoto()
+            .then(blob => {
+                img.src = URL.createObjectURL(blob);
+                img.onload = () => { URL.revokeObjectURL(this.src); }
+            })
+            .catch(error => console.error('takePhoto() error:', error));
     });
-    if (supported) {
-        navigator.mediaDevices.getUserMedia(constraints)
-            .then((stream) => {
-                player.srcObject = stream;
-            });
+    try{
+        const stream = await navigator.mediaDevices.getUserMedia(constraints)
+        video = stream.getVideoTracks()[0]
+        player.srcObject = stream
+    } catch (error) {
+        alert(`${error.name}`)
+        console.error(error)
     }
 
 </script>
