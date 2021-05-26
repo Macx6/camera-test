@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <title>camera test</title>
     <style>
+        body {
+            margin: 0;
+        }
         #player {
             min-height: 90vh;
             min-width: 100vw;
@@ -11,27 +14,22 @@
     </style>
 </head>
 <body>
-<video id="player" autoplay height="500" width="500"></video>
-<button id="capture">Capture</button>
-<p id="result"></p>
+<video id="player" autoplay></video>
+<a id="result"></a>
 <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
 <script src="qr-scanner.umd.min.js"></script>
 <script>
     const player = document.getElementById('player');
-    const captureButton = document.getElementById('capture');
 
     const onSuccess = (result) => {
+        document.getElementById('result').href = result
         document.getElementById('result').innerText = result
-        setTimeout(() => window.location.href = result, 5000)
+        setTimeout(() => window.location.href = result, 3000)
     }
+
     QrScanner.WORKER_PATH = 'qr-scanner-worker.min.js'
     const qrScanner = new QrScanner(player, onSuccess);
-
-    captureButton.addEventListener('click', () => {
-        console.log('listening')
-        qrScanner.start();
-    })
-
+    qrScanner.start();
 </script>
 </body>
 </html>
