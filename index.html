@@ -36,9 +36,10 @@
         console.error(error)
     }
 
-    const qrScanner = new QrScanner(player, result => console.log('decoded qr code:', result));
     QrScanner.WORKER_PATH = 'qr-scanner-worker.min.js'
+    const qrScanner = new QrScanner(player, result => console.log('decoded qr code:', result));
     captureButton.addEventListener('click', () => {
+        console.log('listening')
         qrScanner.start();
     })
 
