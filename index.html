@@ -19,23 +19,6 @@
     const player = document.getElementById('player');
     const captureButton = document.getElementById('capture');
 
-    const constraints = {
-        video: {
-            facingMode: 'environment',
-            focusMode: {ideal: "continuous"},
-            width: {min: 1280},
-            height: {min: 720},
-        },
-    };
-    try {
-        navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
-            player.srcObject = stream
-        })
-    } catch (error) {
-        alert(`${error.name}`)
-        console.error(error)
-    }
-
     QrScanner.WORKER_PATH = 'qr-scanner-worker.min.js'
     const qrScanner = new QrScanner(player, result => console.log('decoded qr code:', result));
     captureButton.addEventListener('click', () => {
