@@ -11,13 +11,12 @@
     </style>
 </head>
 <body>
-<video id="player" autoplay></video>
+<video id="player" autoplay height="500" width="500"></video>
 <button id="capture">Capture</button>
-<img id="canvas" width=320 height=240/>
 <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+<script src="qr-scanner.umd.min.js"></script>
 <script>
     const player = document.getElementById('player');
-    const img = document.getElementById('canvas');
     const captureButton = document.getElementById('capture');
 
     const constraints = {
@@ -28,28 +27,20 @@
             height: {min: 720},
         },
     };
-    let imageCapture = null
-    let video = null
-    captureButton.addEventListener('click', () => {
-        imageCapture = new ImageCapture(video)
-        imageCapture.takePhoto()
-            .then(blob => {
-                img.src = URL.createObjectURL(blob);
-                img.onload = () => {
-                    URL.revokeObjectURL(this.src);
-                }
-            })
-            .catch(error => console.error('takePhoto() error:', error));
-    });
     try {
         navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
-            video = stream.getVideoTracks()[0]
             player.srcObject = stream
         })
     } catch (error) {
         alert(`${error.name}`)
         console.error(error)
     }
+
+    const qrScanner = new QrScanner(player, result => console.log('decoded qr code:', result));
+    QrScanner.WORKER_PATH = 'qr-scanner-worker.min.js'
+    captureButton.addEventListener('click', () => {
+        qrScanner.start();
+    })
 
 </script>
 </body>
